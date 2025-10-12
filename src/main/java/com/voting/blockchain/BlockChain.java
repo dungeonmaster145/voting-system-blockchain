@@ -14,6 +14,18 @@ public class BlockChain {
 
     public void addBlock(Block block){
         this.blockChain.add(block);
+        log.info("Block added to chain. Total blocks: {}", blockChain.size());
+    }
+    
+    public Block createGenesisBlock() {
+        return new Block("0", "Genesis Block - Voting System Initialized", 2);
+    }
+    
+    public void initializeChain() {
+        if (blockChain.isEmpty()) {
+            addBlock(createGenesisBlock());
+            log.info("Blockchain initialized with genesis block");
+        }
     }
 
     public Block getLatestBlock(){
@@ -26,6 +38,10 @@ public class BlockChain {
     }
 
     public boolean isChainValid() {
+        if (blockChain.isEmpty()) {
+            return true;
+        }
+        
         Block firstBlock = blockChain.get(0);
         String calculatedHash = firstBlock.calculateHash();
         String currentBlockHash = firstBlock.getHash();

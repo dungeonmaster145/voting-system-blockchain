@@ -1,49 +1,69 @@
 package com.voting.blockchain;
 
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.util.Base64;
 
 @Slf4j
 @Data
-public class Block {
-    private String prevHash;
-    private String data;
-    private String hash;
-    private long timestamp;
+public final class Block {
+
+    private final String prevHash;
+    private final String data;
+    private final String hash;
+    private final long timestamp;
+    private long miningCounter;
 
     public Block(String prevHash, String data) {
-        this.prevHash = prevHash;
+        this.prevHash = prevHash == null ? "0" : prevHash;
         this.data = data;
         this.timestamp = Instant.now().toEpochMilli();
-        this.hash = calculateHash();
-
+        this.miningCounter = 0;
+        this.hash = mineBlock(4); // Default difficulty of 4
     }
 
-    public String calculateHash(){
-        try {
-            String prevHashValue = StringUtils.hasText(prevHash) ? prevHash : "0";
-            String dataVal = prevHashValue + data + timestamp;
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = messageDigest.digest(dataVal.getBytes(StandardCharsets.UTF_8));
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hashBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
+    public Block(String prevHash, String data, int difficulty) {
+        this.prevHash = prevHash == null ? "0" : prevHash;
+        this.data = data;
+        this.timestamp = Instant.now().toEpochMilli();
+        this.miningCounter = 0;
+        this.hash = mineBlock(difficulty);
+    }
 
-            return hexString.toString();
+    public String calculateHash() {
+        try {
+            String payload = prevHash + "|" + data + "|" + timestamp + "|" + miningCounter;
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            return Base64.getEncoder().encodeToString(
+                    digest.digest(payload.getBytes(StandardCharsets.UTF_8))
+            );
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Hash calculation failed", e);
+            throw new RuntimeException("Hash algorithm error", e);
         }
     }
 
+    public String mineBlock(int difficulty) {
+        String target = "0".repeat(difficulty);
+        String hash;
+        
+        log.info("Mining block with difficulty: {}", difficulty);
+        long startTime = System.currentTimeMillis();
+        
+        do {
+            miningCounter++;
+            hash = calculateHash();
+        } while (!hash.startsWith(target));
+        
+        long endTime = System.currentTimeMillis();
+        log.info("Block mined in {} ms with nonce: {}", (endTime - startTime), miningCounter);
+        
+        return hash;
+    }
 }
+
