@@ -1,2 +1,12 @@
 /Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/blockchain/Block.java
-/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/VotingSystemBlockchainApplication.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/enums/Phase.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/model/VoterToken.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/enums/PoliticalParty.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/service/VotingService.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/VotingSystemBlockchainApplication.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/model/Voter.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/controller/VotingController.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/election/Election.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/blockchain/BlockChain.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/model/Vote.java
+/Users/a32410/Documents/LPD/voting-system-blockchain/src/main/java/com/voting/model/Candidate.java
